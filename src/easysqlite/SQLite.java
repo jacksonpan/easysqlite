@@ -3,6 +3,7 @@ package easysqlite;
 import java.io.File;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 public class SQLite {
 	private static SQLite single = null;
@@ -32,7 +33,9 @@ public class SQLite {
 	public int openDatabase(String dbName) {
 		File databasePath = ctx.getDatabasePath(dbName);
 		if (!databasePath.exists()) {
-			new SQLiteHelper(ctx, dbName);
+			SQLiteHelper help = new SQLiteHelper(ctx, dbName);
+			help.getReadableDatabase();
+			help.close();
 		}
 		return sqlCore.open(databasePath.getPath());
 	}
@@ -40,12 +43,26 @@ public class SQLite {
 	public int openDatabase(String dbName, String dbPassword) {
 		File databasePath = ctx.getDatabasePath(dbName);
 		if (!databasePath.exists()) {
-			new SQLiteHelper(ctx, dbName);
+			SQLiteHelper help = new SQLiteHelper(ctx, dbName);
+			help.getReadableDatabase();
+			help.close();
+			
+			if (dbPassword.length() == 0) {
+				return sqlCore.open(databasePath.getPath());
+			} else {
+				sqlCore.open(databasePath.getPath());
+				sqlCore.setKey(dbPassword);
+				sqlCore.close();
+				return sqlCore.openWithPassword(databasePath.getPath(), dbPassword);
+			}
 		}
-		if (dbPassword.length() == 0) {
-			return sqlCore.open(databasePath.getPath());
-		} else {
-			return sqlCore.openWithPassword(databasePath.getPath(), dbPassword);
+		else
+		{
+			if (dbPassword.length() == 0) {
+				return sqlCore.open(databasePath.getPath());
+			} else {
+				return sqlCore.openWithPassword(databasePath.getPath(), dbPassword);
+			}
 		}
 	}
 
