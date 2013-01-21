@@ -7,3 +7,6 @@ easysqlite自己开发了针对android使用的sqlite_jni封装，详情看easys
 easysqlite在iOS中的使用就比较简单，直接编译sqlite3secure.c就可以了,object-c封装推荐使用FMDatabase。
 
 本人QQ:530933208，欢迎爱好者一起来维护这个项目为更好的使用sqlite，更简单的使用加解密，更方便的让初学者简单编译使用，一起努力吧！
+
+License:
+follow GPL license
